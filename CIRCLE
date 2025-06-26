@@ -1,0 +1,11 @@
+namespace _8labbib
+{
+    public class Circle : Ellipse
+    {
+        public Circle(int x, int y, int w) 
+            : base(x, y, w, w)
+        {
+
+        }
+    }
+}

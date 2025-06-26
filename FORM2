@@ -1,0 +1,93 @@
+using _8labbib;
+
+namespace _8labbibf
+{
+    public partial class Form2 : Form
+    {
+        private bool flag;
+        private int numPoints;
+        Polygon polygon;
+        private int i = 0;
+
+        public Form2()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (flag == false) 
+                {
+                    numPoints = int.Parse(textBox1.Text); 
+                    polygon = new Polygon(numPoints); 
+
+                    flag = true; 
+
+                    textBox1.Enabled = false; 
+                    textBox2.Enabled = true; 
+                    textBox3.Enabled = true; 
+                    button2.Enabled = false;
+
+                }
+                else if (i != numPoints && int.Parse(textBox1.Text) <= Init.pictureBox.Width && int.Parse(textBox2.Text) <= Init.pictureBox.Height)
+                {
+                    polygon.pointFs[i].X = int.Parse(textBox2.Text); 
+                    polygon.pointFs[i].Y = int.Parse(textBox3.Text);
+                    i++;
+                }
+                else 
+                {
+                    MessageBox.Show("Рисунок вышел за границу");
+                }
+                if (i == numPoints) 
+                {
+                    button1.Enabled = false; 
+                    button2.Enabled = true; 
+
+                    flag = false; 
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Неверно! Введите данные повторно"); 
+            }   
+            textBox2.Clear(); 
+            textBox3.Clear();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (polygon == null || i < numPoints) 
+                {
+                    MessageBox.Show("Сначала введите все точки многоугольника");
+                    return; 
+                }
+
+                if (numPoints < 3) 
+                {
+                    MessageBox.Show("Многоугольник должен иметь минимум 3 вершины");
+                    return; 
+                }
+
+                polygon.Draw();
+                ShapeContainer.AddFigure(polygon);
+
+                flag = false;
+                i = 0;
+                textBox1.Enabled = true; 
+                textBox1.Clear(); 
+                textBox2.Clear();
+                textBox3.Clear();
+                button1.Enabled = true; 
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"Ошибка при отрисовке многоугольника: {ex.Message}");
+            }
+        }
+    }
+}

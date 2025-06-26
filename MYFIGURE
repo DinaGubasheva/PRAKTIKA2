@@ -1,0 +1,78 @@
+using System.Drawing;
+
+namespace _8labbib
+{
+    public class Car : Figure
+    {
+        public int Size { get; set; }
+        public Color BodyColor { get; set; } = Color.Red;
+        public Color TopColor { get; set; } = Color.LightBlue;
+        public Color WindowColor { get; set; } = Color.White;
+
+        public Car(int x, int y, int size) //это конструктор, который создает объект car задав его координаты
+        {
+            this.x = x;
+            this.y = y;
+            this.Size = size;
+        }
+
+        public override void Draw()
+        {
+            Graphics g = Graphics.FromImage(Init.bitmap); //колеса(размер и позиция)
+
+            int wheelDiameter = Size / 4;
+            int wheelY = y + Size / 6;
+            int wheelDistance = Size / 2;
+
+            g.FillEllipse(Brushes.Black, //создаем черный круг(колесо)
+                x - wheelDistance,  //расстояние,  на которое колесо смещено по горизонтали от опорной точки x.
+                wheelY - wheelDiameter / 2,
+                wheelDiameter,
+                wheelDiameter);
+
+            g.FillEllipse(Brushes.Black,
+                x + wheelDistance - wheelDiameter, //создаем черный круг(колесо)
+                wheelY - wheelDiameter / 2, //расстояние,  на которое колесо смещено по горизонтали от опорной точки x.
+                wheelDiameter,
+                wheelDiameter);
+
+            int bodyWidth = Size;
+            int bodyHeight = Size / 3;
+            g.FillRectangle(new SolidBrush(BodyColor), //создаем и заполняем прямоугольник
+                x - bodyWidth / 2,
+                y - bodyHeight,
+                bodyWidth,
+                bodyHeight);
+
+            int topSize = Size / 3;
+            g.FillRectangle(new SolidBrush(TopColor), //создаем и заполняем прямоугольник
+                x - bodyWidth / 4,
+                y - bodyHeight - topSize,
+                topSize,
+                topSize);
+
+            Point[] windowPoints = { //windowPoints содержит 3 точки
+                new Point(x - bodyWidth / 4 + topSize / 4, y - bodyHeight - topSize + topSize / 4),
+                new Point(x - bodyWidth / 4 + topSize / 2, y - bodyHeight - topSize / 2),
+                new Point(x - bodyWidth / 4 + topSize * 3/4, y - bodyHeight - topSize + topSize / 4)
+            }; //эти точки позволяют задать форму и расположение окна
+            g.FillPolygon(new SolidBrush(WindowColor), windowPoints);
+
+            Init.pictureBox.Image = Init.bitmap;
+        }
+
+        public override void MoveTo(int deltaX, int deltaY)
+        {
+            if (!((x + deltaX < Size) || //проверяет, может ли объект перемещаться в новое положение, не выходя за пределы 
+                  (x + deltaX > Init.pictureBox.Width - Size) ||
+                  (y + deltaY < Size) ||
+                  (y + deltaY > Init.pictureBox.Height - Size / 2)))
+            {
+                x += deltaX; //если перемещается, изменяются его координаты
+                y += deltaY;
+                this.DeleteF(this, false); //объект обновляется и
+                this.Draw(); //перерисовывается
+            }
+        }
+    }
+}

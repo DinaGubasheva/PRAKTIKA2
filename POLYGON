@@ -1,0 +1,58 @@
+using System.Drawing;
+
+namespace _8labbib
+{
+    public class Polygon : Figure
+    {
+        public PointF[] pointFs; //объявление переменных 
+        public int count;
+        public Polygon(int count) // конструктор класса
+        {
+            this.pointFs = new PointF[count];
+
+        }
+        public override void MoveTo(int x, int y) //перемещение многоугольника в новую позицию
+        {
+            int i = 0;
+            if (!((pointFs[0].X + y < 0)
+                || (pointFs[0].X + x > Init.pictureBox.Width && pointFs[0].Y + y < 0)  // проверка не является ли хотя бы одно из условия истинным
+                || (pointFs[0].X + x > Init.pictureBox.Width)                          //для двух первых точек, если ни первая,
+                || (pointFs[0].X + x > Init.pictureBox.Width && pointFs[0].Y + y > Init.pictureBox.Height) //ни вторая, не выходят за границы, то код выполнится
+                || (pointFs[0].Y + y > Init.pictureBox.Height)
+                || (pointFs[0].X + x < 0 && pointFs[0].Y + y > Init.pictureBox.Height)
+                || (pointFs[0].X + x < 0) || (pointFs[1].X + y < 0)
+                || (pointFs[1].X + x > Init.pictureBox.Width && pointFs[1].Y + y < 0)
+                || (pointFs[1].X + x > Init.pictureBox.Width)
+                || (pointFs[1].X + x > Init.pictureBox.Width && pointFs[1].Y + y > Init.pictureBox.Height)
+                || (pointFs[1].Y + y > Init.pictureBox.Height)
+                || (pointFs[1].X + x < 0 && pointFs[1].Y + y > Init.pictureBox.Height)
+                || (pointFs[1].X + x < 0)))
+            {
+                foreach (PointF pointF in pointFs) //foreach начинает цикл, который перебирает все элементы в pointFs
+                {
+                    pointFs[i].X += x; //изменяем положение точки по оси х, смещая её на величину x
+                    pointFs[i].Y += y; //изменяем положение точки по оси у, смещая её на величину у
+                    i++; // увеличивает значение i на 1 
+                }
+                DeleteF(this, false); //this - указывает на текущий объект
+                                      //false - удаление
+                Draw(); //отвечает за визуализацию.
+            }   //Стирает предыдущее изображение; рисует многоугольник заново в его новом положении.
+        }
+
+        public override void Draw()
+        {
+            //создает обект Graphics g, который привязан к Init.bitmap
+            Graphics g = Graphics.FromImage(Init.bitmap);
+            //берет набор точек из this.pointFs, соединяет их и рисует контур через объект g используя цвет, толщину и стиль линии, определенные в объекте Init.pen
+            g.DrawPolygon(Init.pen, this.pointFs);
+            //эта строка делает видимыми для пользователя все изменения
+            Init.pictureBox.Image = Init.bitmap;
+            //объект brush1(черная сплошная кисть) передан Graphics для указания чо да как
+            SolidBrush brush1 = new SolidBrush(Color.Black);
+            //действие рисования. FillPolygon - заполнить многоугольник
+            g.FillPolygon(brush1, pointFs);
+        }
+
+    }
+}

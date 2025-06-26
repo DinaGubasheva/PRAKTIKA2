@@ -1,0 +1,48 @@
+using System.Drawing;
+
+namespace _8labbib
+{
+    public class Rectagle : Figure
+    {
+        public Rectagle(int x, int y, int w, int h) //объявление конструктора
+        {
+            this.x = x; // крч значение х = х
+            this.y = y;
+            this.w = w;
+            this.h = h;
+        }
+
+        public Rectagle()
+        {
+            this.x = 0; //начальные значения
+            this.y = 0;
+            this.w = 0;
+            this.h = 0;
+        }
+
+        public override void Draw()
+        {
+            Graphics g = Graphics.FromImage(Init.bitmap); //для создания отрисовки эллипса
+            g.DrawRectangle(Init.pen, this.x, this.y, this.w, this.h);
+            
+            Init.pictureBox.Image = Init.bitmap; //обновляется изображение
+        }
+
+        public override void MoveTo(int x, int y) 
+        {
+            if (!((this.x + x < 0 && this.y + y < 0) || (this.y + y < 0) // условие истинно, если объект остается в пределах InitBox
+                || (this.x + x > Init.pictureBox.Width && this.y + y < 0)
+                || (this.x + this.w + x > Init.pictureBox.Width)
+                || (this.x + x > Init.pictureBox.Width && this.y + y > Init.pictureBox.Height)
+                || (this.y + this.h + y > Init.pictureBox.Height)
+                || (this.x + x < 0 && this.y + y > Init.pictureBox.Height) || (this.x + x < 0)))
+            {
+                this.x += x; //для перемещения объекта
+                this.y += y;
+                this.DeleteF(this, false); //удаление
+                this.Draw(); // перерисовка
+            }
+
+        }
+    }
+}

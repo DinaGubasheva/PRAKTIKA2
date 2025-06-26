@@ -1,0 +1,11 @@
+namespace _8labbib
+{
+    public class Square : Rectagle
+    {
+        public Square(int x, int y, int w) 
+            : base(x, y, w, w) //мы передаем значения в конструктор класса Square для установки положения и размера
+        {
+
+        }
+    }
+}

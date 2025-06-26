@@ -1,0 +1,13 @@
+using _8labbib;
+
+namespace _8labib
+{
+    public class Triangle : Polygon 
+    {
+        public Triangle(int count = 3) //если при создании Triangle не будет передано значение для count, то автоматом будет 3 вершины
+            : base(count) //вызывается конструктор родительского класса Polygon
+        {
+
+        }
+    }
+}

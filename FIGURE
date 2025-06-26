@@ -1,0 +1,48 @@
+using System.Drawing;
+
+namespace _8labbib
+{
+    abstract public class Figure
+    {
+        public int x;
+        public int y;
+        public int w;
+        public int h;
+
+        abstract public void Draw();
+        abstract public void MoveTo(int x, int y); //MoveTo - для перемещения объекта
+        public void DeleteF(Figure figure, bool flag = true) //DeleteF - я для удаления определённой фигуры 
+        {
+            if (flag == true)
+            { 
+                Graphics g = Graphics.FromImage(Init.bitmap); // если флаг топ, то код стирает  1 фигуру, затем все стирает
+                ShapeContainer.figureList.Remove(figure);
+                this.Clear();
+                Init.pictureBox.Image = Init.bitmap;
+                foreach (Figure f in ShapeContainer.figureList)
+                {
+                    f.Draw();
+                }
+            }
+            else
+            {
+                Graphics g = Graphics.FromImage(Init.bitmap); //визуальное удаление фигуры с экрана
+                                                              //, но сохраняет ее в приложении
+                ShapeContainer.figureList.Remove(figure);
+                this.Clear();
+                Init.pictureBox.Image = Init.bitmap;
+                foreach (Figure f in ShapeContainer.figureList) //перерисовывает фигуру, которая не явл нашей фигурой
+                {                                           //возвращает эту фигуру обратно в список
+                    f.Draw();
+                }
+                ShapeContainer.figureList.Add(figure);
+            }
+        }
+
+        public void Clear()
+        {
+            Graphics g = Graphics.FromImage(Init.bitmap); //запускают процесс процесс создания, которая очищается и подготавливается
+            g.Clear(Color.White);
+        }
+    }
+}
